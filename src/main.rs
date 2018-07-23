@@ -21,6 +21,42 @@ impl<'a> Node<'a> {
             },
         }
     }
+
+    fn print(&self) {
+        println!("{}", self.val);
+    }
+
+    // Print binary tree in a preorder way
+    //   Preorder  (Root, Left, Right)
+    //   Inorder   (Left, Root, Right)
+    //   Postorder (Left, Right, Root)
+    pub fn traverse(&self) {
+        let mut vec = Vec::new();
+        vec.push(self);
+
+        while !vec.is_empty() {
+            let temp_node = vec.pop();
+
+            // Unpacks Some(Node{...})
+            match temp_node {
+                Some(ref node) => {
+                    node.print();
+
+                    // Avoiding moving 'node' by using reference pattern
+                    match node.r {
+                        Some(ref subnode) => vec.push(subnode),
+                        None => (),
+                    }
+
+                    match node.l {
+                        Some(ref subnode) => vec.push(subnode),
+                        None => (),
+                    }
+                },
+                None => (),
+            }
+        }
+    }
 }
 
 fn main() {
@@ -31,5 +67,6 @@ fn main() {
     x.insert("i");
     x.insert("k");
 
-    println!("{:?}", x);
+    //println!("{:?}", x);
+    x.traverse();
 }
